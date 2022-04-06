@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+*.vs/
+*RayTracing/.vs/
+*RayTracing/Debug/
