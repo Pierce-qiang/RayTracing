@@ -5,7 +5,7 @@
 #include "sphere.h"
 #include "material.h"
 #include "moving_sphere.h"
-//#include<chrono>
+#include<chrono>
 
 #include <iostream>
 color ray_color(const ray& r, const hittable& world, int depth) {
@@ -77,14 +77,13 @@ hittable_list random_scene() {
 
 int main() {
     
-
     // Image
 
     auto aspect_ratio = 16.0 / 9.0;
-    int image_width = 400;
+    int image_width = 40;
     int samples_per_pixel = 10;
     const int max_depth = 10;
-
+    std::cout << "SPP: " << samples_per_pixel << "\n";
     // World
     auto world = random_scene();
 
@@ -103,7 +102,7 @@ int main() {
     color* data = new color[image_width * image_height];
     
 #pragma omp parallel for 
-    for (int j = image_height - 1; j >= 0; --j) {
+    for (int j = 0; j <image_height; ++j) {
 #pragma omp parallel for
         for (int i = 0; i < image_width; ++i) {
             color pixel_color(0, 0, 0);
