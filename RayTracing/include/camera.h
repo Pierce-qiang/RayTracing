@@ -11,7 +11,7 @@ public:
         double aspect_ratio,
         double aperture,//diameter
         double focus_dist, // the image pos to camera
-        double _time0 = 0,
+        double _time0 = 0,  //shutter time begin
         double _time1 = 0
     ) {
         auto theta = degrees_to_radians(vfov);
@@ -34,7 +34,7 @@ public:
     }
 
     ray get_ray(double s, double t) const {
-        vec3 rd = lens_radius * random_in_unit_disk();
+        vec3 rd = lens_radius * random_on_unit_disk();
         vec3 offset = u * rd.x() + v * rd.y();
 
         return ray(

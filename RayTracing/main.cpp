@@ -6,7 +6,8 @@
 #include "moving_sphere.h"
 #include "frameBuffer.h"
 #include<chrono>
-
+#include <mutex>
+#include <thread>
 #include <iostream>
 color ray_color(const ray& r, const hittable& world, int depth) {
     hit_record rec;
@@ -75,11 +76,11 @@ hittable_list random_scene() {
     return world;
 }
 
+std::mutex print_mutex;
 int main() {
     auto startTime = std::chrono::system_clock::now();
 
     // Image
-
     auto aspect_ratio = 16.0 / 9.0;
     int image_width = 400;
     int samples_per_pixel = 1;
@@ -101,22 +102,74 @@ int main() {
 
     // Render
     FrameBuffer framebuffer(image_width, image_height);
-#pragma omp parallel for 
-    for (int j = 0; j <image_height; ++j) {
-#pragma omp parallel for
-        for (int i = 0; i < image_width; ++i) {
-            color pixel_color(0, 0, 0);
-            for (int s = 0; s < samples_per_pixel; ++s) {
-                auto u = (i + random_double()) / (image_width - 1);
-                auto v = (j + random_double()) / (image_height - 1);
-                v = 1 - v;//reverse v
-                ray r = cam.get_ray(u, v);
-                pixel_color += ray_color(r, world,max_depth);
+
+// use openmp to accelerate, this is easy but hard to print process
+// print mutex will delay whole process
+//#pragma omp parallel for 
+//    for (int j = 0; j <image_height; ++j) {
+//#pragma omp parallel for
+//        for (int i = 0; i < image_width; ++i) {
+//            color pixel_color(0, 0, 0);
+//            for (int s = 0; s < samples_per_pixel; ++s) {
+//                auto u = (i + random_double()) / (image_width - 1);
+//                auto v = (j + random_double()) / (image_height - 1);
+//                v = 1 - v;//reverse v
+//                ray r = cam.get_ray(u, v);
+//                pixel_color += ray_color(r, world,max_depth);
+//            }
+//            pixel_color /= samples_per_pixel;
+//            framebuffer.SetColor(i, j, pixel_color);
+//        }
+//    }
+
+
+    int process = 0;
+    auto castRayMultiThreading = [&](uint32_t rowStart, uint32_t rowEnd, uint32_t colStart, uint32_t colEnd)
+    {
+        for (uint32_t j = rowStart; j < rowEnd; ++j) {
+            for (uint32_t i = colStart; i < colEnd; ++i) {
+                // generate primary ray direction
+                color pixel_color(0, 0, 0);
+                for (int s = 0; s < samples_per_pixel; ++s) {
+                    auto u = (i + random_double()) / (image_width - 1);
+                    auto v = (j + random_double()) / (image_height - 1);
+                    v = 1 - v;//reverse v
+                    ray r = cam.get_ray(u, v);
+                    pixel_color += ray_color(r, world, max_depth);
+                }
+                pixel_color /= samples_per_pixel;
+                framebuffer.SetColor(i, j, pixel_color);
+                process++;
             }
-            pixel_color /= samples_per_pixel;
-            framebuffer.SetColor(i, j, pixel_color);
+
+            //print mutex to print process
+            std::lock_guard<std::mutex> g1(print_mutex);
+            UpdateProgress(1.0 * process / (image_width*image_height));
+        }
+    };
+
+    int id = 0;
+    constexpr int bx = 5;
+    constexpr int by = 5;
+    std::thread th[bx * by];
+
+    int strideX = image_width / bx + 1;
+    int strideY = image_height / by + 1;
+
+    // divide 5*5 block
+    for (int i = 0; i < image_height; i += strideY)
+    {
+        for (int j = 0; j < image_width; j += strideX)
+        {
+            th[id] = std::thread(castRayMultiThreading, i, std::min(i + strideY, image_height), j, std::min(j + strideX, image_width));
+            id++;
         }
     }
+
+    for (int i = 0; i < bx * by; i++) th[i].join();
+    UpdateProgress(1.f);
+
+
 
     framebuffer.saveAsPPM("binary.ppm", 2.2);
 

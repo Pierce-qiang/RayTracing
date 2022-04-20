@@ -50,7 +50,85 @@ inline double clamp(double x, double min, double max) {
     if (x > max) return max;
     return x;
 }
+
 inline int random_int(int min, int max) {
     // Returns a random integer in [min,max].
     return static_cast<int>(random_double(min, max + 1));
 }
+
+//reject method
+//vec3 random_in_unit_sphere() {
+//    while (true) {
+//        auto p = vec3::random(-1, 1);
+//        if (p.length_squared() >= 1) continue;
+//        return p;
+//    }
+//}
+//vec3 random_unit_vector() {
+//    return unit_vector(random_in_unit_sphere());
+//}
+//vec3 random_in_hemisphere(const vec3& normal) {
+//    vec3 in_unit_sphere = random_in_unit_sphere();
+//    if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
+//        return in_unit_sphere;
+//    else
+//        return -in_unit_sphere;
+//}
+//vec3 random_in_unit_disk() {
+//    while (true) {
+//        auto p = vec3(random_double(-1, 1), random_double(-1, 1), 0);
+//        if (p.length_squared() >= 1) continue;
+//        return p;
+//    }
+//}
+
+
+//sample theory renference
+//https://zhuanlan.zhihu.com/p/376432029
+//theta is the angle with z axis
+vec3 random_on_unit_sphere() {// cos theta = 1-2rand1   phi = 2* PI*rand2
+    double phi = 2*pi*random_double();
+    double rand1 = random_double();
+    double sintheta =2*sqrt(rand1 * (1 - rand1));
+    return {cos(phi) * sintheta, sin(phi) * sintheta,1.0 - 2 * rand1 };
+}
+vec3 random_on_unit_hemisphere(){//cos theta = rand1  phi = 2*PI*rand2
+    double phi = 2*pi*random_double();
+    double costheta = random_double();
+    double sintheta = sqrt(1-costheta*costheta);
+    return { sintheta * cos(phi),sintheta*sin(phi),costheta };
+}
+vec3 random_in_unit_sphere(){
+    double radius = cbrt(random_double());
+    double phi = 2*pi*random_double();
+    double rand1 = random_double();
+    double sintheta =2*sqrt(rand1 * (1 - rand1));
+    return {radius*cos(phi)*sintheta,radius*sin(phi)*sintheta, radius * (1.0-2*rand1) };
+}
+
+vec3 random_on_triangle(const vec3&A,const vec3& B,const vec3& C){
+    double u = random_double();
+    double v = (1-u)*random_double();
+    return {u*A+v*B+(1-u-v)*C};
+}
+
+vec3 random_on_unit_disk() {
+    double phi = 2 * pi * random_double();
+    double radius = sqrt(random_double());
+    return { radius * cos(phi),radius * sin(phi),0 };
+}
+
+inline void UpdateProgress(float progress)
+{
+    int barWidth = 70;
+
+    std::cout << "[";
+    int pos = barWidth * progress;
+    for (int i = 0; i < barWidth; ++i) {
+        if (i < pos) std::cout << "=";
+        else if (i == pos) std::cout << ">";
+        else std::cout << " ";
+    }
+    std::cout << "] " << int(progress * 100.0) << " %\r";
+    std::cout.flush();
+};
