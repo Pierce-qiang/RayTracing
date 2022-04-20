@@ -9,8 +9,8 @@ public:
         vec3   vup,
         double vfov, // vertical field-of-view in degrees
         double aspect_ratio,
-        double aperture,
-        double focus_dist,
+        double aperture,//diameter
+        double focus_dist, // the image pos to camera
         double _time0 = 0,
         double _time1 = 0
     ) {
@@ -40,7 +40,10 @@ public:
         return ray(
             origin + offset,
             lower_left_corner + s * horizontal + t * vertical - origin - offset,
-            random_double(time0, time1)
+            random_double(time0, time1) //this is for motion blur time, motion blur is the accumulate color
+            //during shutter.here t0 and t1 is  shutter time period
+            // 
+            //time0 + 0.1*(time1-time0) //why not this?
         );
     }
 

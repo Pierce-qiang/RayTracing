@@ -1,10 +1,10 @@
 #include "rtweekend.h"
 #include "camera.h"
-#include "color.h"
 #include "hittable_list.h"
 #include "sphere.h"
 #include "material.h"
 #include "moving_sphere.h"
+#include "frameBuffer.h"
 #include<chrono>
 
 #include <iostream>
@@ -76,12 +76,13 @@ hittable_list random_scene() {
 }
 
 int main() {
-    
+    auto startTime = std::chrono::system_clock::now();
+
     // Image
 
     auto aspect_ratio = 16.0 / 9.0;
-    int image_width = 40;
-    int samples_per_pixel = 10;
+    int image_width = 400;
+    int samples_per_pixel = 1;
     const int max_depth = 10;
     std::cout << "SPP: " << samples_per_pixel << "\n";
     // World
@@ -97,10 +98,9 @@ int main() {
 
     camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
 
-    // Render
 
-    color* data = new color[image_width * image_height];
-    
+    // Render
+    FrameBuffer framebuffer(image_width, image_height);
 #pragma omp parallel for 
     for (int j = 0; j <image_height; ++j) {
 #pragma omp parallel for
@@ -109,30 +109,20 @@ int main() {
             for (int s = 0; s < samples_per_pixel; ++s) {
                 auto u = (i + random_double()) / (image_width - 1);
                 auto v = (j + random_double()) / (image_height - 1);
+                v = 1 - v;//reverse v
                 ray r = cam.get_ray(u, v);
                 pixel_color += ray_color(r, world,max_depth);
             }
-            data[j * image_width + i] = pixel_color;
-        }
-    }
-    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
-    //#pragma omp parallel for 
-    for (int j = image_height - 1; j >= 0; --j) {
-        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        //#pragma omp parallel for 
-        for (int i = 0; i < image_width; ++i) {
-            /*color pixel_color(0, 0, 0);
-            for (int s = 0; s < samples_per_pixel; ++s) {
-                auto u = (i + random_double()) / (image_width - 1);
-                auto v = (j + random_double()) / (image_height - 1);
-                ray r = cam.get_ray(u, v);
-                pixel_color += ray_color(r, world, max_depth);
-            }
-            */
-            write_color(std::cout, data[j * image_width + i], samples_per_pixel);
+            pixel_color /= samples_per_pixel;
+            framebuffer.SetColor(i, j, pixel_color);
         }
     }
 
-    std::cerr << "\nDone.\n";
+    framebuffer.saveAsPPM("binary.ppm", 2.2);
 
+    auto stop = std::chrono::system_clock::now();
+    std::cout << "Render complete: \n";
+    std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::hours>(stop - startTime).count() << " hours\n";
+    std::cout << "          : " << std::chrono::duration_cast<std::chrono::minutes>(stop - startTime).count() << " minutes\n";
+    std::cout << "          : " << std::chrono::duration_cast<std::chrono::seconds>(stop - startTime).count() << " seconds\n";
 }
