@@ -9,6 +9,29 @@
 #include <mutex>
 #include <thread>
 #include <iostream>
+
+////Witty style
+//color ray_color(const ray& r, const hittable& world, int depth) {
+//    hit_record rec;
+//    if (depth <= 0)
+//        return color(0, 0, 0);
+//    if (world.hit(r, 0.001, infinity, rec)) {
+//        ray scattered;
+//        color attenuation;
+//        if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+//            return attenuation * ray_color(scattered, world, depth - 1);
+//        //in object, return dark;
+//        return color(0, 0, 0);
+//    }
+//    vec3 unit_direction = unit_vector(r.direction());
+//    auto t = 0.5 * (unit_direction.y() + 1.0);
+//    return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
+//}
+
+
+
+
+//path tracing
 color ray_color(const ray& r, const hittable& world, int depth) {
     hit_record rec;
     if (depth <= 0)
@@ -21,10 +44,12 @@ color ray_color(const ray& r, const hittable& world, int depth) {
         //in object, return dark;
         return color(0, 0, 0);
     }
+    //skybox
     vec3 unit_direction = unit_vector(r.direction());
     auto t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
+
 
 hittable_list random_scene() {
     hittable_list world;
@@ -100,11 +125,14 @@ int main() {
     camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
 
 
+
+
     // Render
-    FrameBuffer framebuffer(image_width, image_height);
+    frameBuffer m_framebuffer(image_width, image_height);
 
 // use openmp to accelerate, this is easy but hard to print process
 // print mutex will delay whole process
+
 //#pragma omp parallel for 
 //    for (int j = 0; j <image_height; ++j) {
 //#pragma omp parallel for
@@ -118,7 +146,7 @@ int main() {
 //                pixel_color += ray_color(r, world,max_depth);
 //            }
 //            pixel_color /= samples_per_pixel;
-//            framebuffer.SetColor(i, j, pixel_color);
+//            m_framebuffer.setColor(i, j, pixel_color);
 //        }
 //    }
 
@@ -138,7 +166,7 @@ int main() {
                     pixel_color += ray_color(r, world, max_depth);
                 }
                 pixel_color /= samples_per_pixel;
-                framebuffer.SetColor(i, j, pixel_color);
+                m_framebuffer.setColor(i, j, pixel_color);
                 process++;
             }
 
@@ -153,7 +181,7 @@ int main() {
     constexpr int by = 5;
     std::thread th[bx * by];
 
-    int strideX = image_width / bx + 1;
+    int strideX = image_width / bx + 1;// + 1 for safety
     int strideY = image_height / by + 1;
 
     // divide 5*5 block
@@ -171,7 +199,7 @@ int main() {
 
 
 
-    framebuffer.saveAsPPM("binary.ppm", 2.2);
+    m_framebuffer.saveAsPPM("binary.ppm", 2.2);
 
     auto stop = std::chrono::system_clock::now();
     std::cout << "Render complete: \n";

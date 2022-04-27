@@ -2,7 +2,7 @@
 #include <cmath>
 #include <limits>
 #include <memory>
-
+#include <random>
 // Usings
 
 using std::shared_ptr;
@@ -26,11 +26,26 @@ inline double degrees_to_radians(double degrees) {
 #include "vec3.h"
 
 #include <cstdlib>
+
 inline double random_double() {
     //rand() return [0,RAND_MAX]
     // Returns a random real in [0,1).
     return rand() / (RAND_MAX + 1.0);
 }
+
+
+//为什么出问题？
+//inline double random_double()
+//{
+//    static std::random_device dev;
+//    std::mt19937_64 rng(dev());
+//    std::uniform_real_distribution<double> dist(0.f, 1.f);
+//
+//    return dist(rng);
+//}
+
+
+
 
 inline double random_double(double min, double max) {
     // Returns a random real in [min,max).

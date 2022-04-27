@@ -7,6 +7,8 @@
 using std::shared_ptr;
 using std::make_shared;
 
+
+//equivalent to Scene
 class hittable_list : public hittable {
 public:
     hittable_list() {}
@@ -31,8 +33,12 @@ bool hittable_list::hit(const ray& r, double t_min, double t_max, hit_record& re
     for (const auto& object : objects) {
         if (object->hit(r, t_min, closest_so_far, temp_rec)) {
             hit_anything = true;
-            closest_so_far = temp_rec.t;
-            rec = temp_rec;
+
+            // conserve min t
+            if (temp_rec.t < closest_so_far) {
+                closest_so_far = temp_rec.t;
+                rec = temp_rec;
+            }
         }
     }
 

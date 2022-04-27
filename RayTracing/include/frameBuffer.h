@@ -3,25 +3,25 @@
 #include <fstream>
 #include <algorithm>
 
-class FrameBuffer
+class frameBuffer
 {
 public:
 
 
-	FrameBuffer(int width, int height) :_width(width), _height(height) {
+	frameBuffer(int width, int height) :_width(width), _height(height) {
 		_colorBuffer = new color[_width * _height];
 	}
-	~FrameBuffer() {
+	~frameBuffer() {
 		delete[] _colorBuffer;
 	}
 
 	//left down corner is startPos
-	void SetColor(const int x, const int y, const color& input) {
+	void setColor(const int x, const int y, const color& input) {
 		_colorBuffer[y * _width + x]= input;
 	}
 
-	const int GetWidth()const { return _width; };
-	const int GetHeight()const { return _height; };
+	const int getWidth()const { return _width; };
+	const int getHeight()const { return _height; };
 
 
 	void saveAsPPM(const char* name, float gamma)const {
