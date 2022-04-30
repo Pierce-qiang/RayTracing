@@ -120,8 +120,13 @@ vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
     vec3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.length_squared())) * n;
     return r_out_perp + r_out_parallel;
 }
+vec3 lerp(const vec3& a, const vec3& b, double factor) {
+    return a + (b - a) * factor;
+}
 
 inline vec3 unit_vector(vec3 v) {
     return v / v.length();
 }
+
+
 

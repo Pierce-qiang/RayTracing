@@ -70,6 +70,18 @@ inline int random_int(int min, int max) {
     // Returns a random integer in [min,max].
     return static_cast<int>(random_double(min, max + 1));
 }
+inline double lerp(double a, double b, double f) {
+    return a + (b - a) * f;
+}
+
+//  -2t^3 + 3t^2  一阶导数为0 在0/1处
+inline double smooth_3order(double t) {
+    return t * t * (3 - 2 * t);
+}
+//   6t^5-15t^4+10t^3  二阶导数为0 在0/1处
+inline double smooth_5order(double t) {
+    return t * t * t *(t*(6*t-15)+10);
+}
 
 //reject method
 //vec3 random_in_unit_sphere() {
