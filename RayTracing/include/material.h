@@ -1,16 +1,22 @@
 #pragma once
 #include "rtweekend.h"
 #include "hittable.h"
+#include "texture.h"
 
 class material {
 public:
     virtual bool scatter(
         const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered
     ) const = 0;
+    virtual color emitted(double u, double v, const point3& p) const {
+        return color(0, 0, 0);
+    }
 };
+
 class lambertian : public material {
 public:
-    lambertian(const color& a) : albedo(a) {}
+    lambertian(const color& a) : albedo(make_shared<solid_color>(a)) {}
+    lambertian(shared_ptr<texture> a) : albedo(a) {}
 
     virtual bool scatter(
         const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered
@@ -20,12 +26,12 @@ public:
         if (scatter_direction.near_zero())
             scatter_direction = rec.normal;
         scattered = ray(rec.p, scatter_direction, r_in.time());
-        attenuation = albedo;
+        attenuation = albedo->value(rec.u, rec.v, rec.p);
         return true;
     }
 
 public:
-    color albedo;
+    shared_ptr<texture> albedo;
 };
 class metal : public material {
 public:
