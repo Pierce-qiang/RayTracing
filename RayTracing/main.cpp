@@ -270,7 +270,6 @@ int main() {
     int samples_per_pixel = 1;
     const int max_depth = 10;
     color background(0, 0, 0);
-    std::cout << "SPP: " << samples_per_pixel << "\n";
 
     //// World
     //auto world = random_scene();
@@ -360,7 +359,7 @@ int main() {
     }
 
 #pragma endregion
-
+    std::cout << "SPP: " << samples_per_pixel << "\n";
     // Camera
 
     vec3 vup(0, 1, 0);
