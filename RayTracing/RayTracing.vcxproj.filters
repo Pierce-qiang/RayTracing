@@ -59,5 +59,32 @@
     <ClInclude Include="include\renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\perlin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rtw_stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\aarect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\box.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\constant_medium.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\onb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pdf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
