@@ -56,9 +56,6 @@
     <ClInclude Include="include\frameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\scene.h">
       <Filter>头文件</Filter>
     </ClInclude>

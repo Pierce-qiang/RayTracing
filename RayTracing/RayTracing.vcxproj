@@ -162,7 +162,6 @@
     <ClInclude Include="include\pdf.h" />
     <ClInclude Include="include\perlin.h" />
     <ClInclude Include="include\ray.h" />
-    <ClInclude Include="include\renderer.h" />
     <ClInclude Include="include\rtweekend.h" />
     <ClInclude Include="include\rtw_stb_image.h" />
     <ClInclude Include="include\scene.h" />
