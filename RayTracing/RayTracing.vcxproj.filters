@@ -18,6 +18,36 @@
     <ClCompile Include="main.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\aarect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bvh.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hittable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hittable_list.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\moving_sphere.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sphere.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aabb.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\camera.h">
@@ -65,9 +95,6 @@
     <ClInclude Include="include\perlin.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\rtw_stb_image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\aarect.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -81,6 +108,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\pdf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rtw_stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

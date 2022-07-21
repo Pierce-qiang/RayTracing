@@ -146,6 +146,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\aabb.cpp" />
+    <ClCompile Include="src\aarect.cpp" />
+    <ClCompile Include="src\bvh.cpp" />
+    <ClCompile Include="src\hittable.cpp" />
+    <ClCompile Include="src\hittable_list.cpp" />
+    <ClCompile Include="src\moving_sphere.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\sphere.cpp" />
+    <ClCompile Include="src\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\aabb.h" />
@@ -162,8 +172,10 @@
     <ClInclude Include="include\pdf.h" />
     <ClInclude Include="include\perlin.h" />
     <ClInclude Include="include\ray.h" />
+    <ClInclude Include="include\renderer.h" />
     <ClInclude Include="include\rtweekend.h" />
     <ClInclude Include="include\rtw_stb_image.h" />
+    <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\sphere.h" />
     <ClInclude Include="include\texture.h" />

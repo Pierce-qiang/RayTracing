@@ -1,5 +1,6 @@
 #pragma once
 #include "vec3.h"
+#include "rtweekend.h"
 #include <fstream>
 #include <algorithm>
 

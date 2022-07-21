@@ -4,6 +4,12 @@
 #include <memory>
 #include <random>
 // Usings
+// Common Headers
+
+#include "ray.h"
+
+#include <cstdlib>
+
 
 using std::shared_ptr;
 using std::make_shared;
@@ -20,12 +26,7 @@ inline double degrees_to_radians(double degrees) {
     return degrees * pi / 180.0;
 }
 
-// Common Headers
 
-#include "ray.h"
-#include "vec3.h"
-
-#include <cstdlib>
 
 inline double random_double() {
     //rand() return [0,RAND_MAX]
@@ -113,19 +114,19 @@ inline double smooth_5order(double t) {
 //sample theory renference
 //https://zhuanlan.zhihu.com/p/376432029
 //theta is the angle with z axis
-vec3 random_on_unit_sphere() {// cos theta = 1-2rand1   phi = 2* PI*rand2
+inline vec3 random_on_unit_sphere() {// cos theta = 1-2rand1   phi = 2* PI*rand2
     double phi = 2*pi*random_double();
     double rand1 = random_double();
     double sintheta =2*sqrt(rand1 * (1 - rand1));
     return {cos(phi) * sintheta, sin(phi) * sintheta,1.0 - 2 * rand1 };
 }
-vec3 random_on_unit_hemisphere(){//cos theta = rand1  phi = 2*PI*rand2
+inline vec3 random_on_unit_hemisphere(){//cos theta = rand1  phi = 2*PI*rand2
     double phi = 2*pi*random_double();
     double costheta = random_double();
     double sintheta = sqrt(1-costheta*costheta);
     return { sintheta * cos(phi),sintheta*sin(phi),costheta };
 }
-vec3 random_in_unit_sphere(){
+inline vec3 random_in_unit_sphere(){
     double radius = cbrt(random_double());
     double phi = 2*pi*random_double();
     double rand1 = random_double();
@@ -133,13 +134,13 @@ vec3 random_in_unit_sphere(){
     return {radius*cos(phi)*sintheta,radius*sin(phi)*sintheta, radius * (1.0-2*rand1) };
 }
 
-vec3 random_on_triangle(const vec3&A,const vec3& B,const vec3& C){
+inline vec3 random_on_triangle(const vec3&A,const vec3& B,const vec3& C){
     double u = random_double();
     double v = (1-u)*random_double();
     return {u*A+v*B+(1-u-v)*C};
 }
 
-vec3 random_on_unit_disk() {
+inline vec3 random_on_unit_disk() {
     double phi = 2 * pi * random_double();
     double radius = sqrt(random_double());
     return { radius * cos(phi),radius * sin(phi),0 };
